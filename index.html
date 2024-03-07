@@ -23,6 +23,9 @@
         .title {
             font-size: 24px;
             margin-bottom: 20px;
+            position: absolute;
+            width: 100%;
+            top: 10px;
         }
         .progress-container {
             background-color: #555; /* Darker background for contrast */
@@ -32,58 +35,57 @@
             box-sizing: border-box; /* To include padding in the width */
             max-width: 800px; /* Maximum width of the progress bar */
             margin: auto;
+            padding-top: 40px;
         }
         .progress-bar {
             height: 100%;
             background: linear-gradient(to right, #a00, #ffcc00, #00a000);
             width: 100%;
             position: absolute;
-            top: 0;
+            top: 40px;
             border-radius: 20px;
             z-index: 1;
         }
         .marker {
             position: absolute;
-            top: 0;
+            top: 40px;
             bottom: 0;
             width: 2px;
-            background-color: rgba(255, 255, 255, 0.75); /* Visible line */
+            background-color: #fff; /* Visible line */
             z-index: 2;
         }
         .marker-label {
             position: absolute;
-            color: rgba(255, 255, 255, 0.75); /* Visible text */
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 2;
+            color: #fff; /* Visible text */
+            top: 0;
             font-size: 14px;
-            padding: 0 5px; /* Spacing on sides */
-            text-align: center;
+            z-index: 2;
         }
-        .marker-label.extreme-fear { left: 6.25%; } /* Position for Extreme Fear */
-        .marker-label.fear { left: 18.75%; } /* Position for Fear */
+        .marker-label.extreme-fear { left: 12.5%; } /* Adjusted for Extreme Fear */
+        .marker-label.fear { left: 37.5%; } /* Adjusted for Fear */
         .neutral-label {
             position: absolute;
-            color: rgba(255, 255, 255, 0.5); /* Slightly less visible text */
-            bottom: 0;
+            color: #fff; /* Visible text */
+            top: 90px; /* Positioned below the bar */
             left: 50%;
             transform: translateX(-50%);
             font-size: 10px;
             z-index: 2;
         }
-        .marker-label.greed { left: 81.25%; } /* Position for Greed */
-        .marker-label.extreme-greed { left: 93.75%; } /* Position for Extreme Greed */
+        .marker-label.greed { left: 62.5%; } /* Adjusted for Greed */
+        .marker-label.extreme-greed { left: 87.5%; } /* Adjusted for Extreme Greed */
 
         .indicator {
             position: absolute;
-            height: 100%;
+            height: 50px;
             width: 2px; /* Line width */
             background-color: #fff; /* Line color */
             z-index: 3;
+            top: 40px;
         }
         .bubble {
             position: absolute;
-            top: 50%;
+            top: 65px; /* Positioning the bubble on the bar */
             left: 50%;
             width: 35px;
             height: 35px;
@@ -97,6 +99,14 @@
             z-index: 4;
             border: 2px solid #333; /* Border color */
         }
+        .bubble-text {
+            position: absolute;
+            min-width: 20px;
+            min-height: 20px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
     </style>
 </head>
 <body>
@@ -106,14 +116,16 @@
             <div class="progress-bar"></div>
             <div class="marker-label extreme-fear">Extreme Fear</div>
             <div class="marker-label fear">Fear</div>
+            <div class="marker-label greed">Greed</div>
+            <div class="marker-label extreme-greed">Extreme Greed</div>
             <div class="marker" style="left: 25%;"></div> <!-- Marker for 25% -->
             <div class="marker" style="left: 50%;"></div> <!-- Marker for 50% -->
             <div class="marker" style="left: 75%;"></div> <!-- Marker for 75% -->
-            <div class="neutral-label">Neutral</div> <!-- Label for Neutral -->
-            <div class="marker-label greed">Greed</div>
-            <div class="marker-label extreme-greed">Extreme Greed</div>
+            <div class="neutral-label">Neutral</div> <!-- Neutral label below the middle line -->
             <div class="indicator" id="indicator">
-                <div class="bubble" id="bubble"></div>
+                <div class="bubble">
+                    <span class="bubble-text" id="bubble-text"></span>
+                </div>
             </div>
         </div>
     </div>
@@ -125,12 +137,12 @@
                 const indexData = data.data[0];
                 const indexValue = parseInt(indexData.value, 10);
                 const indicator = document.getElementById('indicator');
-                const bubble = document.getElementById('bubble');
+                const bubbleText = document.getElementById('bubble-text');
 
                 // Set the position of the indicator line and bubble based on the index value
                 const indicatorPosition = indexValue; // The API value is the percentage
                 indicator.style.left = `${indicatorPosition}%`;
-                bubble.textContent = indexValue; // Display the index value inside the bubble
+                bubbleText.textContent = indexValue; // Display the index value inside the bubble
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
