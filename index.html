@@ -7,17 +7,31 @@
     <style>
         body { 
             font-family: Arial, sans-serif; 
-            margin: 20px;
+            margin: 0;
+            padding: 0;
             background-color: #333; /* Dark background for contrast */
             color: #fff; /* For dark mode text color */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            text-align: center;
+            width: 100%;
+        }
+        .title {
+            font-size: 24px;
+            margin-bottom: 20px;
         }
         .progress-container {
-            width: 100%;
             background-color: #555; /* Darker background for contrast */
             border-radius: 20px;
             position: relative;
             height: 50px;
             box-sizing: border-box; /* To include padding in the width */
+            max-width: 800px; /* Maximum width of the progress bar */
+            margin: auto;
         }
         .progress-bar {
             height: 100%;
@@ -46,10 +60,19 @@
             padding: 0 5px; /* Spacing on sides */
             text-align: center;
         }
-        .marker-label.fear { left: 12.5%; } /* Centered over 0-25% */
-        .marker-label.neutral { left: 37.5%; } /* Centered over 25-50% */
-        .marker-label.greed { left: 62.5%; } /* Centered over 50-75% */
-        .marker-label.extreme-greed { left: 87.5%; } /* Centered over 75-100% */
+        .marker-label.extreme-fear { left: 6.25%; } /* Position for Extreme Fear */
+        .marker-label.fear { left: 18.75%; } /* Position for Fear */
+        .neutral-label {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.5); /* Slightly less visible text */
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            z-index: 2;
+        }
+        .marker-label.greed { left: 81.25%; } /* Position for Greed */
+        .marker-label.extreme-greed { left: 93.75%; } /* Position for Extreme Greed */
 
         .indicator {
             position: absolute;
@@ -72,22 +95,26 @@
             justify-content: center;
             font-size: 14px;
             z-index: 4;
+            border: 2px solid #333; /* Border color */
         }
     </style>
 </head>
 <body>
-    <h1>Fear and Greed Index</h1>
-    <div class="progress-container">
-        <div class="progress-bar"></div>
-        <div class="marker" style="left: 25%;"></div>
-        <div class="marker" style="left: 50%;"></div>
-        <div class="marker" style="left: 75%;"></div>
-        <div class="marker-label fear">Fear</div>
-        <div class="marker-label neutral">Neutral</div>
-        <div class="marker-label greed">Greed</div>
-        <div class="marker-label extreme-greed">Extreme Greed</div>
-        <div class="indicator" id="indicator">
-            <div class="bubble" id="bubble"></div>
+    <div class="container">
+        <div class="title">Fear and Greed Index</div>
+        <div class="progress-container">
+            <div class="progress-bar"></div>
+            <div class="marker-label extreme-fear">Extreme Fear</div>
+            <div class="marker-label fear">Fear</div>
+            <div class="marker" style="left: 25%;"></div> <!-- Marker for 25% -->
+            <div class="marker" style="left: 50%;"></div> <!-- Marker for 50% -->
+            <div class="marker" style="left: 75%;"></div> <!-- Marker for 75% -->
+            <div class="neutral-label">Neutral</div> <!-- Label for Neutral -->
+            <div class="marker-label greed">Greed</div>
+            <div class="marker-label extreme-greed">Extreme Greed</div>
+            <div class="indicator" id="indicator">
+                <div class="bubble" id="bubble"></div>
+            </div>
         </div>
     </div>
 
