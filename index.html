@@ -15,33 +15,46 @@
             width: 100%;
             background-color: #444; /* Darker background for contrast */
             border-radius: 20px;
-            overflow: hidden;
             position: relative;
-            height: 30px;
-            margin-bottom: 10px;
+            height: 50px;
+            padding: 0 5px; /* Padding for text inside the bar */
+            box-sizing: border-box; /* To include padding in the width */
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, #a00, #ffcc00, #00a000);
+            width: 100%;
+            position: absolute;
+            top: 0;
+            border-radius: 20px;
+            z-index: 1;
         }
         .indicator {
             position: absolute;
-            top: 30px;
+            top: 50%; /* Center vertically */
             width: 30px;
             height: 30px;
             border-radius: 50%;
             background-color: #fff; /* White color for the indicator */
             border: 2px solid #333; /* Border to blend with the dark background */
-            transform: translateX(-50%); /* Adjusts for the center of the indicator */
+            transform: translate(-50%, -50%); /* Adjusts for the center of the indicator */
+            z-index: 2; /* Ensure it's above the progress bar */
         }
         .score-label {
             position: absolute;
-            top: 65px;
+            top: 120%;
             color: #fff;
             font-size: 14px;
             transform: translateX(-50%);
+            z-index: 3; /* Ensure it's above the progress bar */
         }
         .extreme-label {
             position: absolute;
             color: #fff;
             font-size: 14px;
-            top: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 2; /* Ensure it's above the progress bar */
         }
         .extreme-label.fear {
             left: 0;
@@ -49,25 +62,17 @@
         .extreme-label.greed {
             right: 0;
         }
-        .progress-background {
-            height: 100%;
-            background: linear-gradient(to right, #a00, #ffcc00, #00a000);
-            width: 100%;
-            position: absolute;
-            top: 0;
-            border-radius: 20px;
-        }
     </style>
 </head>
 <body>
     <h1>Fear and Greed Index</h1>
-    <div class="extreme-label fear">Extreme Fear</div>
     <div class="progress-container">
-        <div class="progress-background"></div>
+        <div class="progress-bar"></div>
+        <div class="extreme-label fear">Extreme Fear</div>
         <div class="indicator" id="indicator"></div>
-        <div class="score-label" id="scoreLabel">Loading...</div>
+        <div class="score-label" id="scoreLabel"></div>
+        <div class="extreme-label greed">Extreme Greed</div>
     </div>
-    <div class="extreme-label greed">Extreme Greed</div>
 
     <script>
         fetch('https://api.alternative.me/fng/?limit=1')
@@ -78,15 +83,15 @@
                 const indicator = document.getElementById('indicator');
                 const scoreLabel = document.getElementById('scoreLabel');
 
-                // Calculate the left position of the indicator as a percentage
-                const indicatorPosition = (indexValue / 100) * 100; // Convert value to a percentage of the bar
-                indicator.style.left = `calc(${indicatorPosition}% - 15px)`; // Adjust position by half the indicator width to center it
-                scoreLabel.style.left = `calc(${indicatorPosition}% - 15px)`; // Center the label above the indicator
-                scoreLabel.textContent = indexValue; // Set the text of the score label to the index value
+                // Set the position of the indicator and label based on the index value
+                const indicatorLeftPercent = indexValue; // The API value is the percentage
+                indicator.style.left = `${indicatorLeftPercent}%`;
+                scoreLabel.style.left = `${indicatorLeftPercent}%`;
+                scoreLabel.textContent = indexValue; // Display the index value
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
-                // Handle errors, such as by displaying a message to the user
+                // Handle errors by displaying a message to the user
             });
     </script>
 </body>
