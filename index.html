@@ -48,20 +48,29 @@
         }
         .marker-label {
             position: absolute;
-            color: rgba(255, 255, 255, 0.75); /* Visible text */
-            top: 0;
-            transform: translateY(-100%);
+            color: #fff; /* Visible text */
+            top: 50%;
+            transform: translateY(-50%);
             font-size: 14px;
             z-index: 2;
         }
+        .marker {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 2px;
+            background-color: #fff; /* Visible line */
+            z-index: 2;
+        }
+        /* Positioning labels inside the bar */
         .marker-label.extreme-fear { left: 12.5%; }
         .marker-label.fear { left: 37.5%; }
         .marker-label.greed { left: 62.5%; }
         .marker-label.extreme-greed { left: 87.5%; }
         .neutral-label {
             position: absolute;
-            color: rgba(255, 255, 255, 0.5); /* Slightly less visible text */
-            top: 100%;
+            color: #fff; /* Visible text */
+            bottom: -20px; /* Positioned below the bar */
             left: 50%;
             transform: translateX(-50%);
             font-size: 12px;
@@ -70,6 +79,7 @@
 
         .indicator {
             position: absolute;
+            top: 0;
             height: 100%;
             width: 2px; /* Line width */
             background-color: #fff; /* Line color */
@@ -87,7 +97,7 @@
             align-items: center;
             justify-content: center;
             font-size: 14px;
-            color: black; /* Black text inside the bubble */
+            color: black; /* Text color inside the bubble */
             z-index: 4;
             border: 2px solid #333; /* Border color */
         }
@@ -100,9 +110,12 @@
             <div class="progress-bar"></div>
             <div class="marker-label extreme-fear">Extreme Fear</div>
             <div class="marker-label fear">Fear</div>
+            <div class="marker" style="left: 25%;"></div> <!-- Marker for 25% -->
+            <div class="marker-label neutral-label">Neutral</div> <!-- Label for Neutral -->
+            <div class="marker" style="left: 50%;"></div> <!-- Marker for 50% -->
             <div class="marker-label greed">Greed</div>
+            <div class="marker" style="left: 75%;"></div> <!-- Marker for 75% -->
             <div class="marker-label extreme-greed">Extreme Greed</div>
-            <div class="neutral-label">Neutral</div> <!-- Label for Neutral -->
             <div class="indicator" id="indicator">
                 <div class="bubble" id="bubble"></div>
             </div>
