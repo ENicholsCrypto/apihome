@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fear and Greed Index Display</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .index-container {
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .index-title {
+            margin: 0 0 10px 0;
+            padding: 0;
+        }
+        .index-value, .index-classification {
+            margin: 5px 0;
+        }
+        /* Add more styles here */
+    </style>
+</head>
+<body>
+    <div class="index-container">
+        <h1 class="index-title">Fear and Greed Index</h1>
+        <div id="fearAndGreedIndex">Loading...</div>
+    </div>
+    <script>
+        fetch('https://api.alternative.me/fng/?limit=1')
+            .then(response => response.json())
+            .then(data => {
+                const indexData = data.data[0];
+                const content = `
+                    <div class="index-value">Current Index Value: ${indexData.value}</div>
+                    <div class="index-classification">Classification: ${indexData.value_classification}</div>
+                `;
+                document.getElementById('fearAndGreedIndex').innerHTML = content;
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    </script>
+</body>
+</html>
