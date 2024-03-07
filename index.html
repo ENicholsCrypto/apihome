@@ -33,19 +33,26 @@
             top: 0;
             bottom: 0;
             width: 2px;
-            background-color: rgba(255, 255, 255, 0.5); /* Lightly visible line */
+            background-color: rgba(255, 255, 255, 0.75); /* Visible line */
+            z-index: 2;
         }
         .marker-label {
             position: absolute;
-            color: rgba(255, 255, 255, 0.5); /* Slightly transparent text */
-            top: 100%;
-            white-space: nowrap;
-            transform: translateY(5px);
-            font-size: 12px;
+            color: rgba(255, 255, 255, 0.75); /* Visible text */
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 2;
+            font-size: 14px;
+            padding: 0 5px; /* Spacing on sides */
+            text-align: center;
         }
+        .marker-label.fear { left: 12.5%; } /* Centered over 0-25% */
+        .marker-label.neutral { left: 37.5%; } /* Centered over 25-50% */
+        .marker-label.greed { left: 62.5%; } /* Centered over 50-75% */
+        .marker-label.extreme-greed { left: 87.5%; } /* Centered over 75-100% */
+
         .indicator {
             position: absolute;
-            top: 0;
             height: 100%;
             width: 2px; /* Line width */
             background-color: #fff; /* Line color */
@@ -54,26 +61,17 @@
         .bubble {
             position: absolute;
             top: 50%;
-            width: 30px;
-            height: 30px;
+            left: 50%;
+            width: 35px;
+            height: 35px;
             background-color: #fff;
             border-radius: 50%;
             transform: translate(-50%, -50%);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 12px;
+            font-size: 14px;
             z-index: 4;
-        }
-        .bubble:before { /* Add a tail if desired */
-            content: '';
-            position: absolute;
-            bottom: -10px; /* Adjust this value to move the tail up or down */
-            left: 50%;
-            border-width: 5px;
-            border-style: solid;
-            border-color: #fff transparent transparent transparent;
-            transform: translateX(-50%);
         }
     </style>
 </head>
@@ -82,16 +80,15 @@
     <div class="progress-container">
         <div class="progress-bar"></div>
         <div class="marker" style="left: 25%;"></div>
-        <div class="marker-label" style="left: 25%;">Fear</div>
         <div class="marker" style="left: 50%;"></div>
-        <div class="marker-label" style="left: 50%;">Neutral</div>
         <div class="marker" style="left: 75%;"></div>
-        <div class="marker-label" style="left: 75%;">Greed</div>
+        <div class="marker-label fear">Fear</div>
+        <div class="marker-label neutral">Neutral</div>
+        <div class="marker-label greed">Greed</div>
+        <div class="marker-label extreme-greed">Extreme Greed</div>
         <div class="indicator" id="indicator">
             <div class="bubble" id="bubble"></div>
         </div>
-        <div class="extreme-label fear">Extreme Fear</div>
-        <div class="extreme-label greed">Extreme Greed</div>
     </div>
 
     <script>
@@ -115,4 +112,3 @@
     </script>
 </body>
 </html>
-``
