@@ -46,14 +46,6 @@
             border-radius: 20px;
             z-index: 1;
         }
-        .marker-label {
-            position: absolute;
-            color: #fff; /* Visible text */
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 14px;
-            z-index: 2;
-        }
         .marker {
             position: absolute;
             top: 0;
@@ -62,14 +54,17 @@
             background-color: #fff; /* Visible line */
             z-index: 2;
         }
-        /* Positioning labels inside the bar */
-        .marker-label.extreme-fear { left: 12.5%; }
-        .marker-label.fear { left: 37.5%; }
-        .marker-label.greed { left: 62.5%; }
-        .marker-label.extreme-greed { left: 87.5%; }
+        .marker-label {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.75); /* Visible text */
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 14px;
+            z-index: 2;
+        }
         .neutral-label {
             position: absolute;
-            color: #fff; /* Visible text */
+            color: rgba(255, 255, 255, 0.5); /* Slightly less visible text */
             bottom: -20px; /* Positioned below the bar */
             left: 50%;
             transform: translateX(-50%);
@@ -92,7 +87,6 @@
             height: 30px;
             background-color: #fff;
             border-radius: 50%;
-            transform: translate(-50%, -50%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -108,17 +102,10 @@
         <div class="title">Fear and Greed Index</div>
         <div class="progress-container">
             <div class="progress-bar"></div>
-            <div class="marker-label extreme-fear">Extreme Fear</div>
-            <div class="marker-label fear">Fear</div>
-            <div class="marker" style="left: 25%;"></div> <!-- Marker for 25% -->
-            <div class="marker-label neutral-label">Neutral</div> <!-- Label for Neutral -->
-            <div class="marker" style="left: 50%;"></div> <!-- Marker for 50% -->
-            <div class="marker-label greed">Greed</div>
-            <div class="marker" style="left: 75%;"></div> <!-- Marker for 75% -->
-            <div class="marker-label extreme-greed">Extreme Greed</div>
-            <div class="indicator" id="indicator">
-                <div class="bubble" id="bubble"></div>
-            </div>
+            <!-- Removed individual labels for a cleaner look -->
+            <div class="neutral-label">Neutral</div> <!-- Label for Neutral -->
+            <div class="indicator" id="indicator"></div>
+            <div class="bubble" id="bubble"></div>
         </div>
     </div>
 
@@ -131,10 +118,14 @@
                 const indicator = document.getElementById('indicator');
                 const bubble = document.getElementById('bubble');
 
-                // Set the position of the indicator line and bubble based on the index value
-                const indicatorPosition = indexValue; // The API value is the percentage
-                indicator.style.left = `calc(${indicatorPosition}% - 1px)`; // Adjust for the width of the line
-                bubble.style.left = `calc(${indicatorPosition}% - 15px)`; // Adjust for the bubble's position
+                // Calculate the left position as a percentage
+                const indicatorLeft = (indexValue / 100) * (document.querySelector('.progress-container').clientWidth - 2); // Subtract 2px for indicator line width
+
+                // Update the indicator line position
+                indicator.style.left = `${indicatorLeft}px`;
+
+                // Update the bubble position and content
+                bubble.style.left = `${indicatorLeft - (bubble.offsetWidth / 2)}px`; // Center the bubble on the indicator line
                 bubble.textContent = indexValue; // Display the index value inside the bubble
             })
             .catch(error => {
