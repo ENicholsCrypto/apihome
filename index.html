@@ -5,40 +5,82 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fear and Greed Index Display</title>
     <style>
-        body { font-family: Arial, sans-serif; }
-        .index-container {
-            margin: 20px;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .progress-container {
+            width: 100%;
+            background-color: #ddd;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            height: 30px;
         }
-        .index-title {
-            margin: 0 0 10px 0;
-            padding: 0;
+        .progress-bar {
+            height: 100%;
+            border-radius: 20px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            transition: width 0.4s ease;
         }
-        .index-value, .index-classification {
-            margin: 5px 0;
+        .indicator {
+            position: absolute;
+            top: -35px; /* Adjusts the vertical position of the indicator */
+            width: 2px;
+            height: 30px; /* Match progress bar height */
+            background-color: black; /* Indicator color */
         }
-        /* Add more styles here */
+        .score-label {
+            position: absolute;
+            top: -60px; /* Adjusts vertical position of the score label */
+            color: #000;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
-    <div class="index-container">
-        <h1 class="index-title">Fear and Greed Index</h1>
-        <div id="fearAndGreedIndex">Loading...</div>
+    <h1>Fear and Greed Index</h1>
+    <div id="fearAndGreedIndex" class="progress-container">
+        <div class="progress-bar"></div>
+        <div class="indicator" id="indicator"></div>
+        <div class="score-label" id="scoreLabel">Loading...</div>
     </div>
+
     <script>
         fetch('https://api.alternative.me/fng/?limit=1')
             .then(response => response.json())
             .then(data => {
                 const indexData = data.data[0];
-                const content = `
-                    <div class="index-value">Current Index Value: ${indexData.value}</div>
-                    <div class="index-classification">Classification: ${indexData.value_classification}</div>
-                `;
-                document.getElementById('fearAndGreedIndex').innerHTML = content;
+                const indexValue = parseInt(indexData.value, 10);
+                const progressBar = document.querySelector('.progress-bar');
+                const indicator = document.getElementById('indicator');
+                const scoreLabel = document.getElementById('scoreLabel');
+
+                // Calculate width and color based on index value
+                progressBar.style.width = `${indexValue}%`;
+                progressBar.style.backgroundColor = getColor(indexValue);
+
+                // Position indicator and update score label
+                indicator.style.left = `calc(${indexValue}% - 1px)`; // Adjust for indicator width
+                scoreLabel.style.left = `calc(${indexValue}% - 20px)`; // Center label over indicator
+                scoreLabel.textContent = `Score: ${indexValue} (${indexData.value_classification})`;
+
             })
             .catch(error => console.error('Error fetching data:', error));
+
+        function getColor(value) {
+            // Converts value to a color from red to green
+            if(value <= 50) {
+                // More fear, shade of red
+                const redIntensity = 255;
+                const greenIntensity = Math.round(5.1 * value);
+                return `rgb(${redIntensity},${greenIntensity},0)`;
+            } else {
+                // More greed, shade of green
+                const greenIntensity = 255;
+                const redIntensity = Math.round(510 - 5.1 * value);
+                return `rgb(${redIntensity},${greenIntensity},0)`;
+            }
+        }
     </script>
 </body>
 </html>
