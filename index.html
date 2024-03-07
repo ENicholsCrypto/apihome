@@ -5,14 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fear and Greed Index Display</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px;
+            background-color: #333; /* Assuming dark mode */
+            color: #fff; /* For dark mode text color */
+        }
         .progress-container {
             width: 100%;
-            background-color: #ddd;
+            background-color: #444; /* Dark background for dark mode */
             border-radius: 20px;
             overflow: hidden;
             position: relative;
             height: 30px;
+            margin-bottom: 10px;
         }
         .progress-bar {
             height: 100%;
@@ -24,26 +30,57 @@
         }
         .indicator {
             position: absolute;
-            top: -35px; /* Adjusts the vertical position of the indicator */
-            width: 2px;
-            height: 30px; /* Match progress bar height */
-            background-color: black; /* Indicator color */
+            top: 30px; /* Sits below the progress bar */
+            width: 30px; /* Width of the indicator */
+            height: 30px; /* Height of the indicator */
+            border-radius: 15px; /* Makes it circular */
+            background-color: #fff; /* Indicator color for dark mode */
+            transform: translateX(-50%); /* Center it on the spot */
+            border: 3px solid #333; /* Border to match the dark mode background */
         }
         .score-label {
             position: absolute;
-            top: -60px; /* Adjusts vertical position of the score label */
-            color: #000;
+            top: 65px; /* Position below the indicator */
+            color: #fff; /* For dark mode text color */
             font-size: 14px;
+            white-space: nowrap; /* Prevents wrapping on small screens */
+            transform: translateX(-50%); /* Center it on the spot */
+        }
+        .extreme-label {
+            position: absolute;
+            color: #fff; /* For dark mode text color */
+            font-size: 14px;
+            white-space: nowrap; /* Prevents wrapping */
+        }
+        .extreme-label.fear {
+            left: 0;
+            top: 0;
+        }
+        .extreme-label.greed {
+            right: 0;
+            top: 0;
+        }
+        /* Gradient background for progress bar */
+        .progress-background {
+            height: 100%;
+            background: linear-gradient(to right, #a00, #ffcc00, #00a000);
+            position: absolute;
+            width: 100%;
+            top: 0;
+            border-radius: 20px;
         }
     </style>
 </head>
 <body>
     <h1>Fear and Greed Index</h1>
-    <div id="fearAndGreedIndex" class="progress-container">
+    <div class="extreme-label fear">Extreme Fear</div>
+    <div class="progress-container">
+        <div class="progress-background"></div>
         <div class="progress-bar"></div>
         <div class="indicator" id="indicator"></div>
         <div class="score-label" id="scoreLabel">Loading...</div>
     </div>
+    <div class="extreme-label greed">Extreme Greed</div>
 
     <script>
         fetch('https://api.alternative.me/fng/?limit=1')
@@ -55,32 +92,22 @@
                 const indicator = document.getElementById('indicator');
                 const scoreLabel = document.getElementById('scoreLabel');
 
-                // Calculate width and color based on index value
+                // Set the width of the progress bar based on the fetched index value
                 progressBar.style.width = `${indexValue}%`;
-                progressBar.style.backgroundColor = getColor(indexValue);
 
-                // Position indicator and update score label
-                indicator.style.left = `calc(${indexValue}% - 1px)`; // Adjust for indicator width
-                scoreLabel.style.left = `calc(${indexValue}% - 20px)`; // Center label over indicator
-                scoreLabel.textContent = `Score: ${indexValue} (${indexData.value_classification})`;
+                // Position the indicator and score label based on the index value
+                const indicatorPosition = indexValue - (30 / 2); // Subtract half the indicator's width for centering
+                indicator.style.left = `${indicatorPosition}%`;
+                scoreLabel.style.left = `${indicatorPosition}%`;
+                scoreLabel.textContent = indexValue; // Set the text of the score label to the index value
 
+                // Remove background color of the progress bar since we have a gradient background
+                progressBar.style.background = 'none';
             })
-            .catch(error => console.error('Error fetching data:', error));
-
-        function getColor(value) {
-            // Converts value to a color from red to green
-            if(value <= 50) {
-                // More fear, shade of red
-                const redIntensity = 255;
-                const greenIntensity = Math.round(5.1 * value);
-                return `rgb(${redIntensity},${greenIntensity},0)`;
-            } else {
-                // More greed, shade of green
-                const greenIntensity = 255;
-                const redIntensity = Math.round(510 - 5.1 * value);
-                return `rgb(${redIntensity},${greenIntensity},0)`;
-            }
-        }
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                // Handle errors, such as by displaying a message to the user
+            });
     </script>
 </body>
 </html>
