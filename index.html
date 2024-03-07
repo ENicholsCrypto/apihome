@@ -8,64 +8,52 @@
         body { 
             font-family: Arial, sans-serif; 
             margin: 20px;
-            background-color: #333; /* Assuming dark mode */
+            background-color: #333; /* Dark background for contrast */
             color: #fff; /* For dark mode text color */
         }
         .progress-container {
             width: 100%;
-            background-color: #444; /* Dark background for dark mode */
+            background-color: #444; /* Darker background for contrast */
             border-radius: 20px;
             overflow: hidden;
             position: relative;
             height: 30px;
             margin-bottom: 10px;
         }
-        .progress-bar {
-            height: 100%;
-            border-radius: 20px;
-            position: absolute;
-            left: 0;
-            top: 0;
-            transition: width 0.4s ease;
-        }
         .indicator {
             position: absolute;
-            top: 30px; /* Sits below the progress bar */
-            width: 30px; /* Width of the indicator */
-            height: 30px; /* Height of the indicator */
-            border-radius: 15px; /* Makes it circular */
-            background-color: #fff; /* Indicator color for dark mode */
-            transform: translateX(-50%); /* Center it on the spot */
-            border: 3px solid #333; /* Border to match the dark mode background */
+            top: 30px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #fff; /* White color for the indicator */
+            border: 2px solid #333; /* Border to blend with the dark background */
+            transform: translateX(-50%); /* Adjusts for the center of the indicator */
         }
         .score-label {
             position: absolute;
-            top: 65px; /* Position below the indicator */
-            color: #fff; /* For dark mode text color */
+            top: 65px;
+            color: #fff;
             font-size: 14px;
-            white-space: nowrap; /* Prevents wrapping on small screens */
-            transform: translateX(-50%); /* Center it on the spot */
+            transform: translateX(-50%);
         }
         .extreme-label {
             position: absolute;
-            color: #fff; /* For dark mode text color */
+            color: #fff;
             font-size: 14px;
-            white-space: nowrap; /* Prevents wrapping */
+            top: 0;
         }
         .extreme-label.fear {
             left: 0;
-            top: 0;
         }
         .extreme-label.greed {
             right: 0;
-            top: 0;
         }
-        /* Gradient background for progress bar */
         .progress-background {
             height: 100%;
             background: linear-gradient(to right, #a00, #ffcc00, #00a000);
-            position: absolute;
             width: 100%;
+            position: absolute;
             top: 0;
             border-radius: 20px;
         }
@@ -76,7 +64,6 @@
     <div class="extreme-label fear">Extreme Fear</div>
     <div class="progress-container">
         <div class="progress-background"></div>
-        <div class="progress-bar"></div>
         <div class="indicator" id="indicator"></div>
         <div class="score-label" id="scoreLabel">Loading...</div>
     </div>
@@ -88,21 +75,14 @@
             .then(data => {
                 const indexData = data.data[0];
                 const indexValue = parseInt(indexData.value, 10);
-                const progressBar = document.querySelector('.progress-bar');
                 const indicator = document.getElementById('indicator');
                 const scoreLabel = document.getElementById('scoreLabel');
 
-                // Set the width of the progress bar based on the fetched index value
-                progressBar.style.width = `${indexValue}%`;
-
-                // Position the indicator and score label based on the index value
-                const indicatorPosition = indexValue - (30 / 2); // Subtract half the indicator's width for centering
-                indicator.style.left = `${indicatorPosition}%`;
-                scoreLabel.style.left = `${indicatorPosition}%`;
+                // Calculate the left position of the indicator as a percentage
+                const indicatorPosition = (indexValue / 100) * 100; // Convert value to a percentage of the bar
+                indicator.style.left = `calc(${indicatorPosition}% - 15px)`; // Adjust position by half the indicator width to center it
+                scoreLabel.style.left = `calc(${indicatorPosition}% - 15px)`; // Center the label above the indicator
                 scoreLabel.textContent = indexValue; // Set the text of the score label to the index value
-
-                // Remove background color of the progress bar since we have a gradient background
-                progressBar.style.background = 'none';
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
