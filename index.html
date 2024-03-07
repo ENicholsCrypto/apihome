@@ -13,11 +13,10 @@
         }
         .progress-container {
             width: 100%;
-            background-color: #444; /* Darker background for contrast */
+            background-color: #555; /* Darker background for contrast */
             border-radius: 20px;
             position: relative;
             height: 50px;
-            padding: 0 5px; /* Padding for text inside the bar */
             box-sizing: border-box; /* To include padding in the width */
         }
         .progress-bar {
@@ -29,38 +28,52 @@
             border-radius: 20px;
             z-index: 1;
         }
+        .marker {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: rgba(255, 255, 255, 0.5); /* Lightly visible line */
+        }
+        .marker-label {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.5); /* Slightly transparent text */
+            top: 100%;
+            white-space: nowrap;
+            transform: translateY(5px);
+            font-size: 12px;
+        }
         .indicator {
             position: absolute;
-            top: 50%; /* Center vertically */
+            top: 0;
+            height: 100%;
+            width: 2px; /* Line width */
+            background-color: #fff; /* Line color */
+            z-index: 3;
+        }
+        .bubble {
+            position: absolute;
+            top: 50%;
             width: 30px;
             height: 30px;
+            background-color: #fff;
             border-radius: 50%;
-            background-color: #fff; /* White color for the indicator */
-            border: 2px solid #333; /* Border to blend with the dark background */
-            transform: translate(-50%, -50%); /* Adjusts for the center of the indicator */
-            z-index: 2; /* Ensure it's above the progress bar */
+            transform: translate(-50%, -50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            z-index: 4;
         }
-        .score-label {
+        .bubble:before { /* Add a tail if desired */
+            content: '';
             position: absolute;
-            top: 120%;
-            color: #fff;
-            font-size: 14px;
+            bottom: -10px; /* Adjust this value to move the tail up or down */
+            left: 50%;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #fff transparent transparent transparent;
             transform: translateX(-50%);
-            z-index: 3; /* Ensure it's above the progress bar */
-        }
-        .extreme-label {
-            position: absolute;
-            color: #fff;
-            font-size: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 2; /* Ensure it's above the progress bar */
-        }
-        .extreme-label.fear {
-            left: 0;
-        }
-        .extreme-label.greed {
-            right: 0;
         }
     </style>
 </head>
@@ -68,9 +81,16 @@
     <h1>Fear and Greed Index</h1>
     <div class="progress-container">
         <div class="progress-bar"></div>
+        <div class="marker" style="left: 25%;"></div>
+        <div class="marker-label" style="left: 25%;">Fear</div>
+        <div class="marker" style="left: 50%;"></div>
+        <div class="marker-label" style="left: 50%;">Neutral</div>
+        <div class="marker" style="left: 75%;"></div>
+        <div class="marker-label" style="left: 75%;">Greed</div>
+        <div class="indicator" id="indicator">
+            <div class="bubble" id="bubble"></div>
+        </div>
         <div class="extreme-label fear">Extreme Fear</div>
-        <div class="indicator" id="indicator"></div>
-        <div class="score-label" id="scoreLabel"></div>
         <div class="extreme-label greed">Extreme Greed</div>
     </div>
 
@@ -81,13 +101,12 @@
                 const indexData = data.data[0];
                 const indexValue = parseInt(indexData.value, 10);
                 const indicator = document.getElementById('indicator');
-                const scoreLabel = document.getElementById('scoreLabel');
+                const bubble = document.getElementById('bubble');
 
-                // Set the position of the indicator and label based on the index value
-                const indicatorLeftPercent = indexValue; // The API value is the percentage
-                indicator.style.left = `${indicatorLeftPercent}%`;
-                scoreLabel.style.left = `${indicatorLeftPercent}%`;
-                scoreLabel.textContent = indexValue; // Display the index value
+                // Set the position of the indicator line and bubble based on the index value
+                const indicatorPosition = indexValue; // The API value is the percentage
+                indicator.style.left = `${indicatorPosition}%`;
+                bubble.textContent = indexValue; // Display the index value inside the bubble
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
@@ -96,3 +115,4 @@
     </script>
 </body>
 </html>
+``
