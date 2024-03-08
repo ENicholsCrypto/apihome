@@ -5,152 +5,104 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Investment Dashboard</title>
     <style>
-        /* Style for the tabs and tab content */
-        .tab {
-            overflow: hidden;
-            border: 1px solid #ccc;
-            background-color: #f1f1f1;
-        }
-
-        .tab button {
-            background-color: inherit;
-            float: left;
-            border: none;
-            outline: none;
-            cursor: pointer;
-            padding: 14px 16px;
-            transition: 0.3s;
-        }
-
-        .tab button:hover {
-            background-color: #ddd;
-        }
-
-        .tab button.active {
-            background-color: #ccc;
-        }
-
-        .tabcontent {
-            display: none;
-            padding: 6px 12px;
-            border: 1px solid #ccc;
-            border-top: none;
-        }
-
-        /* Style for Crypto Tracker to match Fear and Greed Index */
-        .crypto-container {
-            background-color: #333; /* Dark background for contrast */
-            color: #fff; /* White text color for readability */
-            font-family: Arial, sans-serif; /* Font style similar to Fear and Greed Index */
-            padding: 20px;
-            border-radius: 10px; /* Rounded corners */
-            margin-top: 20px; /* Spacing from the top */
-            text-align: center; /* Center align the content */
-        }
-
-        .crypto-title {
-            font-size: 2em; /* Larger title font */
-            margin-bottom: 10px; /* Spacing after title */
-        }
-
-        .crypto-list {
-            list-style-type: none; /* Remove bullet points */
-            padding: 0; /* Remove padding */
-        }
-
-        .crypto-item {
-            background: linear-gradient(to right, #a00, #ffcc00, #00a000); /* Gradient effect */
-            margin-bottom: 10px; /* Spacing between items */
-            padding: 10px; /* Padding inside items */
-            border-radius: 5px; /* Rounded corners for items */
-        }
-
-        /* Additional existing styles for the Fear and Greed Index */
         body { 
             font-family: Arial, sans-serif; 
             margin: 0;
             padding: 0;
             background-color: transparent;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
             height: 100vh;
         }
-
-        .container {
+        .container, .crypto-container {
             text-align: center;
             width: 100%;
             max-width: 800px;
-            margin: auto;
-            position: relative; 
-            padding-top: 50px; /* Space for the title */
+            margin: 20px auto;
+            position: relative;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #555;
+            color: #fff;
         }
-
-        .title {
+        .title, .crypto-title {
             font-size: 24px;
-            position: absolute; 
-            width: 100%;
-            top: 0;
-            left: 50%; 
-            transform: translateX(-50%);
+            margin: 20px 0;
         }
-
-        .progress-container, .crypto-container {
-            margin-top: 30px; /* Adjusted space for title */
+        .progress-bar, .crypto-data {
+            margin-top: 20px;
         }
-
-        /* Styles for .progress-bar, .marker-label, .indicator, .bubble */
+        .crypto-data div {
+            background: linear-gradient(to right, #a00, #ffcc00, #00a000);
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
-    <div class="tab">
-        <button class="tablinks" onclick="openTab(event, 'FearGreedIndex')">Fear and Greed Index</button>
-        <button class="tablinks" onclick="openTab(event, 'CryptoInvestments')">Crypto Investments</button>
-    </div>
-
-    <div id="FearGreedIndex" class="tabcontent">
+    <div class="container">
+        <div class="title">Fear and Greed Index</div>
         <div class="progress-container">
-            <!-- Fear and Greed Index content goes here -->
-            <div id="indicator" class="indicator"></div>
-            <div id="bubble" class="bubble"></div>
+            <div class="progress-bar"></div>
+            <div class="marker" style="left: 25%;"></div>
+            <div class="marker" style="left: 50%;"></div>
+            <div class="marker" style="left: 75%;"></div>
+            <div class="marker-label extreme-fear">Extreme Fear</div>
+            <div class="marker-label fear">Fear</div>
+            <div class="marker-label greed">Greed</div>
+            <div class="marker-label extreme-greed">Extreme Greed</div>
+            <div class="neutral-label">Neutral</div>
+            <div class="indicator" id="indicator"></div>
+            <div class="bubble" id="bubble"></div>
         </div>
     </div>
 
-    <div id="CryptoInvestments" class="tabcontent">
-        <div class="crypto-container">
-            <h1 class="crypto-title">Crypto Investments</h1>
-            <ul class="crypto-list" id="crypto-data">
-                <!-- JavaScript will insert crypto items here -->
-            </ul>
-        </div>
+    <div class="crypto-container">
+        <div class="crypto-title">Crypto Investments</div>
+        <div class="crypto-data" id="cryptoData">Loading...</div>
     </div>
 
     <script>
-        function openTab(evt, tabName) {
-            var i, tabcontent, tablinks;
-            tabcontent = document.getElementsByClassName("tabcontent");
-            for (i = 0; i < tabcontent.length; i++) {
-                tabcontent[i].style.display = "none";
-            }
-            tablinks = document.getElementsByClassName("tablinks");
-            for (i = 0; i < tablinks.length; i++) {
-                tablinks[i].className = tablinks[i].className.replace(" active", "");
-            }
-            document.getElementById(tabName).style.display = "block";
-            evt.currentTarget.className += " active";
-        }
-        // Set the first tab as active initially
-        document.getElementsByClassName('tablinks')[0].click();
+    // Fear and Greed Index fetching and displaying logic
+    fetch('https://api.alternative.me/fng/?limit=1')
+        .then(response => response.json())
+        .then(data => {
+            const indexData = data.data[0];
+            const indexValue = parseInt(indexData.value, 10);
+            const indicator = document.getElementById('indicator');
+            const bubble = document.getElementById('bubble');
 
-        // CoinAPI Key
-        const api_key = 76ac23a4-5a3e-42ac-839d-12792f2023e7'; // Replace with your actual CoinAPI key
-        // CoinAPI and Crypto Tracker JavaScript
-        // Your existing JavaScript for fetching and displaying crypto data
-        // Note: You need to include your CoinAPI key in the headers for fetch()
+            indicator.style.width = indexValue + '%';
+            bubble.textContent = `${indexValue} (${indexData.value_classification})`;
+        })
+        .catch(error => console.error('Error fetching Fear and Greed data:', error));
 
-        // Fear and Greed Index JavaScript
-        // Your existing JavaScript for fetching and displaying Fear and Greed Index data
-        // Note: Ensure this part is correctly fetching and displaying data
+    // Example Crypto Investments fetching and displaying logic
+    const cryptoDataElement = document.getElementById('cryptoData');
+    const cryptocurrencies = ['BTC', 'ETH', 'DOT']; // Example cryptocurrencies
+    const apiKey = 76ac23a4-5a3e-42ac-839d-12792f2023e7
+
+; // Replace with your actual CoinAPI key
+
+    cryptocurrencies.forEach(crypto => {
+        fetch(`https://rest.coinapi.io/v1/exchangerate/${crypto}/USD`, {
+            headers: { 'X-CoinAPI-Key': apiKey }
+        })
+        .then(response => response.json())
+        .then(data => {
+            const rate = data.rate.toFixed(2);
+            const div = document.createElement('div');
+            div.textContent = `${crypto}: $${rate}`;
+            cryptoDataElement.appendChild(div);
+        })
+        .catch(error => console.error(`Error fetching data for ${crypto}:`, error));
+    });
+
+    // Initial display cleanup
+    cryptoDataElement.textContent = '';
     </script>
 </body>
 </html>
