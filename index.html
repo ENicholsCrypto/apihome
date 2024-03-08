@@ -16,22 +16,17 @@
             align-items: center;
             height: 100vh;
         }
-         .container {
+        .container {
             text-align: center;
             width: 100%;
             max-width: 800px;
-            margin: 0 auto; /* Centers the container */
-            position: relative; /* For absolute positioning of children */
         }
-          .title {
+        .title {
             font-size: 24px;
-            margin: 0 auto; /* Center the title */
-            position: absolute; /* Absolutely position the title */
+            margin: 0;
+            position: absolute;
             width: 100%;
-            top: 20px; /* Adjust as needed for spacing above the progress bar */
-            left: 0; /* Align left edge with container */
-            z-index: 2;
-        }
+            top: 10px;
         }
         .progress-container {
             background-color: #555;
@@ -39,7 +34,7 @@
             position: relative;
             height: 50px;
             box-sizing: border-box;
-            margin-top: 70px; /* Give some space for title */
+            margin-top: 60px; /* Give some space for title */
         }
         .progress-bar {
             height: 100%;
