@@ -124,30 +124,30 @@
     </div>
 
     <script>
-        fetch('https://api.alternative.me/fng/?limit=1')
-            .then(response => response.json())
-            .then(data => {
-                const indexData = data.data[0];
-                const indexValue = parseInt(indexData.value, 10);
-                const progressBarWidth = document.querySelector('.progress-container').offsetWidth;
-                const indicator = document.getElementById('indicator');
-                const bubble = document.getElementById('bubble');
+    fetch('https://api.alternative.me/fng/?limit=1')
+        .then(response => response.json())
+        .then(data => {
+            const indexData = data.data[0];
+            const indexValue = parseInt(indexData.value, 10);
+            const progressBarWidth = document.querySelector('.progress-container').offsetWidth;
+            const indicator = document.getElementById('indicator');
+            const bubble = document.getElementById('bubble');
 
-                // Calculate the left position as a percentage of the progress bar width
-                const indicatorPosition = (indexValue / 100) * progressBarWidth;
+            // Calculate the left position as a percentage of the progress bar width
+            const indicatorPositionPercentage = indexValue / 100;
+            const indicatorPosition = progressBarWidth * indicatorPositionPercentage;
+            
+            // Update the indicator line position
+            indicator.style.left = `${indicatorPositionPercentage * 100}%`;
 
-                // Update the indicator line position
-                indicator.style.left = `${indicatorPosition}px`;
-
-                // Update the bubble position and content
-                bubble.style.left = `${indicatorPosition}px`;
-                bubble.style.marginLeft = `-${bubble.offsetWidth / 2}px`;
-                bubble.style.marginTop = `-${bubble.offsetHeight / 2}px`;
-                bubble.textContent = indexValue; // Display the index value inside the bubble
-            })
-            .catch(error => {
-                console.error('Error fetching data:', error);
-            });
-    </script>
+            // Center the bubble over the indicator line
+            bubble.style.left = `calc(${indicatorPositionPercentage * 100}% - ${bubble.offsetWidth / 2}px)`;
+            bubble.style.transform = 'translateY(-50%)'; // Vertically center
+            bubble.textContent = indexValue; // Display the index value inside the bubble
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
+</script>
 </body>
 </html>
