@@ -23,7 +23,10 @@
         }
         .title {
             font-size: 24px;
-            margin-bottom: 30px; /* Add space below the title */
+            margin: 0;
+            position: absolute;
+            width: 100%;
+            top: 10px;
         }
         .progress-container {
             background-color: #555;
@@ -31,6 +34,7 @@
             position: relative;
             height: 50px;
             box-sizing: border-box;
+            margin-top: 60px; /* Give some space for title */
         }
         .progress-bar {
             height: 100%;
@@ -41,14 +45,6 @@
             border-radius: 20px;
             z-index: 1;
         }
-        .marker {
-            position: absolute;
-            top: 0;
-            height: 100%;
-            width: 2px;
-            background-color: #fff;
-            z-index: 2;
-        }
         .marker-label {
             position: absolute;
             color: #fff;
@@ -57,14 +53,23 @@
             font-size: 14px;
             z-index: 2;
         }
-        .marker-label.extreme-fear { left: 0; } /* Adjust the position for 'Extreme Fear' */
-        .marker-label.fear { left: 25%; } /* Position at the 25% mark */
-        .marker-label.greed { right: 25%; } /* Position at the 75% mark */
-        .marker-label.extreme-greed { right: 0; } /* Adjust the position for 'Extreme Greed' */
+        .marker {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 2px;
+            background-color: #fff;
+            z-index: 2;
+        }
+        /* Positioning labels inside the bar */
+        .marker-label.extreme-fear { left: 12.5%; }
+        .marker-label.fear { left: 37.5%; }
+        .marker-label.greed { left: 62.5%; }
+        .marker-label.extreme-greed { left: 87.5%; }
         .neutral-label {
             position: absolute;
             color: #fff;
-            bottom: -20px;
+            bottom: -20px; /* Positioned below the bar */
             left: 50%;
             transform: translateX(-50%);
             font-size: 12px;
@@ -103,6 +108,7 @@
         <div class="title">Fear and Greed Index</div>
         <div class="progress-container">
             <div class="progress-bar"></div>
+            <!-- Markers and labels for sections -->
             <div class="marker" style="left: 25%;"></div>
             <div class="marker" style="left: 50%;"></div>
             <div class="marker" style="left: 75%;"></div>
@@ -111,6 +117,7 @@
             <div class="marker-label greed">Greed</div>
             <div class="marker-label extreme-greed">Extreme Greed</div>
             <div class="neutral-label">Neutral</div>
+            <!-- Indicator and bubble -->
             <div class="indicator" id="indicator"></div>
             <div class="bubble" id="bubble"></div>
         </div>
@@ -122,19 +129,18 @@
             .then(data => {
                 const indexData = data.data[0];
                 const indexValue = parseInt(indexData.value, 10);
-                const progressBar = document.querySelector('.progress-container');
+                const progressBarWidth = document.querySelector('.progress-container').offsetWidth;
                 const indicator = document.getElementById('indicator');
                 const bubble = document.getElementById('bubble');
 
                 // Calculate the left position as a percentage of the progress bar width
-                const progressBarWidth = progressBar.offsetWidth;
-                const indicatorLeft = (indexValue / 100) * progressBarWidth;
+                const indicatorPosition = (indexValue / 100) * progressBarWidth;
 
                 // Update the indicator line position
-                indicator.style.left = `${indicatorLeft}px`;
+                indicator.style.left = `${indicatorPosition}px`;
 
                 // Update the bubble position and content
-                bubble.style.left = `${indicatorLeft}px`;
+                bubble.style.left = `${indicatorPosition}px`;
                 bubble.style.marginLeft = `-${bubble.offsetWidth / 2}px`;
                 bubble.style.marginTop = `-${bubble.offsetHeight / 2}px`;
                 bubble.textContent = indexValue; // Display the index value inside the bubble
