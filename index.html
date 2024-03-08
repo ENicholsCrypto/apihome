@@ -134,44 +134,46 @@
     </div>
 
     <script>
+    // Fear and Greed Index fetching and displaying logic
     fetch('https://api.alternative.me/fng/?limit=1')
         .then(response => response.json())
         .then(data => {
             const indexData = data.data[0];
             const indexValue = parseInt(indexData.value, 10);
-            const progressBarWidth = document.querySelector('.progress-container').offsetWidth;
+            const progressBar = document.querySelector('.progress-bar');
             const indicator = document.getElementById('indicator');
             const bubble = document.getElementById('bubble');
-            const progress = document.querySelector('.progress-bar');
 
-            const indicatorPositionPercentage = indexValue / 100;
-            progress.style.width = `${indicatorPositionPercentage * 100}%`;
-
-            indicator.style.left = `calc(${indicatorPositionPercentage * 100}% - 1px)`;
-            bubble.style.left = `calc(${indicatorPositionPercentage * 100}% - 15px)`;
-            bubble.textContent = indexValue;
+            // Set the width of the progress bar and position the indicator and bubble
+            progressBar.style.width = `${indexValue}%`;
+            indicator.style.left = `${indexValue}%`;
+            bubble.style.left = `${indexValue}%`;
+            bubble.textContent = indexValue; // Display the index value inside the bubble
         })
         .catch(error => {
             console.error('Error fetching Fear and Greed data:', error);
             document.querySelector('.progress-container').textContent = 'Error fetching index data.';
         });
 
+    // Crypto Investments fetching and displaying logic
     const cryptoDataElement = document.getElementById('cryptoData');
-    const cryptocurrencies = ['BTC', 'ETH', 'DOT'];
-    const apiKey = 'YOUR_COINAPI_KEY'; // Replace with your actual CoinAPI key
+    const cryptocurrencies = ['BTC', 'ETH', 'DOT']; // Add any other cryptocurrencies you're tracking
+    const apiKey = '76ac23a4-5a3e-42ac-839d-12792f2023e7'; // Replace with your actual CoinAPI key
 
-    // Clear initial display
-    cryptoDataElement.textContent = '';
+    // Clear any previous content
+    cryptoDataElement.innerHTML = '';
 
     cryptocurrencies.forEach(crypto => {
         fetch(`https://rest.coinapi.io/v1/exchangerate/${crypto}/USD`, {
             headers: { 'X-CoinAPI-Key': apiKey }
         })
-        .then(response => response.json())
-        .then(data => {
-            if (!data.rate) {
-                throw new Error('Rate not found');
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`An error occurred: ${response.statusText}`);
             }
+            return response.json();
+        })
+        .then(data => {
             const rate = data.rate.toFixed(2);
             const div = document.createElement('div');
             div.textContent = `${crypto}: $${rate}`;
@@ -179,10 +181,9 @@
         })
         .catch(error => {
             console.error(`Error fetching data for ${crypto}:`, error);
-            // Update with a more descriptive message for each cryptocurrency.
-            const div = document.createElement('div');
-            div.textContent = `Error fetching data for ${crypto}.`;
-            cryptoDataElement.appendChild(div);
+            const errorMessage = document.createElement('div');
+            errorMessage.textContent = `Error fetching data for ${crypto}.`;
+            cryptoDataElement.appendChild(errorMessage);
         });
     });
     </script>
