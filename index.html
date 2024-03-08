@@ -102,6 +102,11 @@
             border-radius: 5px;
             background-color: #666;
             color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Adding some depth */
+            transition: background-color 0.3s; /* Smooth background-color transition */
+        }
+        .crypto-data div:hover {
+            background-color: #777; /* Slight color change on hover for interactive feel */
         }
     </style>
 </head>
@@ -143,16 +148,20 @@
             progress.style.width = `${indicatorPositionPercentage * 100}%`;
 
             indicator.style.left = `calc(${indicatorPositionPercentage * 100}% - 1px)`;
-            bubble.style.left = `calc(${indicatorPositionPercentage * 100}% + 15px)`;
+            bubble.style.left = `calc(${indicatorPositionPercentage * 100}% - 15px)`;
             bubble.textContent = indexValue;
         })
         .catch(error => {
             console.error('Error fetching Fear and Greed data:', error);
+            document.querySelector('.progress-container').textContent = 'Error fetching index data.';
         });
 
     const cryptoDataElement = document.getElementById('cryptoData');
     const cryptocurrencies = ['BTC', 'ETH', 'DOT'];
     const apiKey = 'YOUR_COINAPI_KEY'; // Replace with your actual CoinAPI key
+
+    // Clear initial display
+    cryptoDataElement.textContent = '';
 
     cryptocurrencies.forEach(crypto => {
         fetch(`https://rest.coinapi.io/v1/exchangerate/${crypto}/USD`, {
@@ -160,6 +169,9 @@
         })
         .then(response => response.json())
         .then(data => {
+            if (!data.rate) {
+                throw new Error('Rate not found');
+            }
             const rate = data.rate.toFixed(2);
             const div = document.createElement('div');
             div.textContent = `${crypto}: $${rate}`;
@@ -167,7 +179,10 @@
         })
         .catch(error => {
             console.error(`Error fetching data for ${crypto}:`, error);
-            cryptoDataElement.textContent = 'Error fetching cryptocurrency data.';
+            // Update with a more descriptive message for each cryptocurrency.
+            const div = document.createElement('div');
+            div.textContent = `Error fetching data for ${crypto}.`;
+            cryptoDataElement.appendChild(div);
         });
     });
     </script>
