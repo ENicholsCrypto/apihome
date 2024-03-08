@@ -17,25 +17,30 @@
             height: 100vh;
         }
         .container {
-            text-align: center;
-            width: 100%;
-            max-width: 800px;
-        }
-         .title {
-        font-size: 24px;
-        text-align: center; /* Ensures the text is centered */
-        width: 100%; /* Full container width */
-        position: absolute; /* Absolute position within the container */
-        top: 0; /* Position at the very top of the container */
-        z-index: 2;
+        /* Center the container */
+        text-align: center;
+        width: 100%;
+        max-width: 800px;
+        margin: auto;
+        position: relative; /* Needed for absolute positioning of children */
+        padding-top: 50px; /* Space for the title */
     }
+
+    .title {
+        font-size: 24px;
+        position: absolute; /* Absolute position within the container */
+        width: 100%;
+        top: 0; /* Position at the top of the container */
+        left: 50%; /* Center horizontally */
+        transform: translateX(-50%); /* Align center with the container */
+        }
         .progress-container {
             background-color: #555;
             border-radius: 20px;
             position: relative;
             height: 50px;
             box-sizing: border-box;
-            margin-top: 60px; /* Give some space for title */
+            margin-top: 30px; /* Give some space for title */
         }
         .progress-bar {
             height: 100%;
