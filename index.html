@@ -21,13 +21,15 @@
             width: 100%;
             max-width: 800px;
         }
-        .title {
-            font-size: 24px;
-            margin: 0;
-            position: absolute;
-            width: 100%;
-            top: 10px;
-        }
+         .title {
+        font-size: 24px;
+        text-align: center; /* Ensures the text is centered */
+        width: 100%; /* Full container width */
+        position: absolute; /* Absolute position within the container */
+        top: 0; /* Position at the very top of the container */
+        transform: translateY(-100%); /* Shift upwards by the full height of the element */
+        z-index: 2;
+    }
         .progress-container {
             background-color: #555;
             border-radius: 20px;
