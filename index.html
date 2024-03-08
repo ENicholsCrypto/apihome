@@ -36,37 +36,37 @@
             border: 1px solid #ccc;
             border-top: none;
         }
-        
-        /* Your existing styles for the Fear and Greed Index and Crypto tracker */
-        /* ... */
-		  /* Style for Crypto Tracker to match Fear and Greed Index */
-    .crypto-container {
-        background-color: #333; /* Dark background for contrast */
-        color: #fff; /* White text color for readability */
-        font-family: Arial, sans-serif; /* Font style similar to Fear and Greed Index */
-        padding: 20px;
-        border-radius: 10px; /* Rounded corners */
-        margin-top: 20px; /* Spacing from the top */
-        text-align: center; /* Center align the content */
-    }
 
-    .crypto-title {
-        font-size: 2em; /* Larger title font */
-        margin-bottom: 10px; /* Spacing after title */
-    }
+        /* Style for Crypto Tracker to match Fear and Greed Index */
+        .crypto-container {
+            background-color: #333; /* Dark background for contrast */
+            color: #fff; /* White text color for readability */
+            font-family: Arial, sans-serif; /* Font style similar to Fear and Greed Index */
+            padding: 20px;
+            border-radius: 10px; /* Rounded corners */
+            margin-top: 20px; /* Spacing from the top */
+            text-align: center; /* Center align the content */
+        }
 
-    .crypto-list {
-        list-style-type: none; /* Remove bullet points */
-        padding: 0; /* Remove padding */
-    }
+        .crypto-title {
+            font-size: 2em; /* Larger title font */
+            margin-bottom: 10px; /* Spacing after title */
+        }
 
-    .crypto-item {
-        background: linear-gradient(to right, #a00, #ffcc00, #00a000); /* Gradient effect */
-        margin-bottom: 10px; /* Spacing between items */
-        padding: 10px; /* Padding inside items */
-        border-radius: 5px; /* Rounded corners for items */
-    }
-	 body { 
+        .crypto-list {
+            list-style-type: none; /* Remove bullet points */
+            padding: 0; /* Remove padding */
+        }
+
+        .crypto-item {
+            background: linear-gradient(to right, #a00, #ffcc00, #00a000); /* Gradient effect */
+            margin-bottom: 10px; /* Spacing between items */
+            padding: 10px; /* Padding inside items */
+            border-radius: 5px; /* Rounded corners for items */
+        }
+
+        /* Additional existing styles for the Fear and Greed Index */
+        body { 
             font-family: Arial, sans-serif; 
             margin: 0;
             padding: 0;
@@ -76,97 +76,30 @@
             align-items: center;
             height: 100vh;
         }
+
         .container {
-        /* Center the container */
-        text-align: center;
-        width: 100%;
-        max-width: 800px;
-        margin: auto;
-        position: relative; /* Needed for absolute positioning of children */
-        padding-top: 50px; /* Space for the title */
-    }
-
-    .title {
-        font-size: 24px;
-        position: absolute; /* Absolute position within the container */
-        width: 100%;
-        top: 0; /* Position at the top of the container */
-        left: 50%; /* Center horizontally */
-        transform: translateX(-50%); /* Align center with the container */
-        }
-        .progress-container {
-            background-color: #555;
-            border-radius: 20px;
-            position: relative;
-            height: 50px;
-            box-sizing: border-box;
-            margin-top: 30px; /* Give some space for title */
-        }
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(to right, #a00, #ffcc00, #00a000);
+            text-align: center;
             width: 100%;
-            position: absolute;
-            top: 0;
-            border-radius: 20px;
-            z-index: 1;
-        }
-        .marker-label {
-            position: absolute;
-            color: #fff;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 14px;
-            z-index: 2;
-        }
-        .marker {
-            position: absolute;
-            top: 0;
-            height: 100%;
-            width: 2px;
-            background-color: #fff;
-            z-index: 2;
-        }
-        /* Positioning labels inside the bar */
-        .marker-label.extreme-fear { left: 12.5%; }
-        .marker-label.fear { left: 37.5%; }
-        .marker-label.greed { left: 62.5%; }
-        .marker-label.extreme-greed { left: 87.5%; }
-        .neutral-label {
-            position: absolute;
-            color: #fff;
-            bottom: -20px; /* Positioned below the bar */
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 12px;
-            z-index: 2;
+            max-width: 800px;
+            margin: auto;
+            position: relative; 
+            padding-top: 50px; /* Space for the title */
         }
 
-        .indicator {
-            position: absolute;
-            top: 50%;
-            height: 100%;
-            width: 2px;
-            background-color: #fff;
-            z-index: 3;
-            transform: translateY(-50%);
+        .title {
+            font-size: 24px;
+            position: absolute; 
+            width: 100%;
+            top: 0;
+            left: 50%; 
+            transform: translateX(-50%);
         }
-        .bubble {
-            position: absolute;
-            top: 50%;
-            width: 30px;
-            height: 30px;
-            background-color: #fff;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            color: black;
-            z-index: 4;
-            border: 2px solid #333;
-            transform: translate(-50%, -50%);
+
+        .progress-container, .crypto-container {
+            margin-top: 30px; /* Adjusted space for title */
         }
+
+        /* Styles for .progress-bar, .marker-label, .indicator, .bubble */
     </style>
 </head>
 <body>
@@ -176,99 +109,48 @@
     </div>
 
     <div id="FearGreedIndex" class="tabcontent">
-        <!-- Fear and Greed Index content -->
+        <div class="progress-container">
+            <!-- Fear and Greed Index content goes here -->
+            <div id="indicator" class="indicator"></div>
+            <div id="bubble" class="bubble"></div>
+        </div>
     </div>
 
     <div id="CryptoInvestments" class="tabcontent">
-        <!-- Crypto Investment content -->
+        <div class="crypto-container">
+            <h1 class="crypto-title">Crypto Investments</h1>
+            <ul class="crypto-list" id="crypto-data">
+                <!-- JavaScript will insert crypto items here -->
+            </ul>
+        </div>
     </div>
-	<div id="CryptoInvestments" class="tabcontent">
-    <div class="crypto-container">
-        <h1 class="crypto-title">Crypto Investments</h1>
-        <ul class="crypto-list" id="crypto-data">
-            <!-- JavaScript will insert crypto items here -->
-        </ul>
-    </div>
-</div>
 
     <script>
         function openTab(evt, tabName) {
-            // Declare all variables
             var i, tabcontent, tablinks;
-
-            // Get all elements with class="tabcontent" and hide them
             tabcontent = document.getElementsByClassName("tabcontent");
             for (i = 0; i < tabcontent.length; i++) {
                 tabcontent[i].style.display = "none";
             }
-
-            // Get all elements with class="tablinks" and remove the class "active"
             tablinks = document.getElementsByClassName("tablinks");
             for (i = 0; i < tablinks.length; i++) {
                 tablinks[i].className = tablinks[i].className.replace(" active", "");
             }
-
-            // Show the current tab, and add an "active" class to the button that opened the tab
             document.getElementById(tabName).style.display = "block";
             evt.currentTarget.className += " active";
         }
-        
-        // Get the element with id="defaultOpen" and click on it
-        document.getElementById("defaultOpen").click();
-        
-       const api_key = 76ac23a4-5a3e-42ac-839d-12792f2023e7;  // Replace with your actual CoinAPI key
-        const base_url = "https://rest.coinapi.io/v1/exchangerate";
-        const cryptocurrencies = [
-            'BTC', 'ETH', 'DOT', 'GRT', 'ADA', 'FET', 'NMR', 
-            'ALGO', 'ATOM', 'SNX', 'MATIC', 'CRV', 'LINK', 
-            'INJ', 'OP', 'SHIB'
-        ];
+        // Set the first tab as active initially
+        document.getElementsByClassName('tablinks')[0].click();
 
-        cryptocurrencies.forEach(crypto => {
-            const url = `${base_url}/${crypto}/USD`;
-            fetch(url, {
-                headers: {'X-CoinAPI-Key': api_key}
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                const cryptoElement = document.createElement('div');
-                cryptoElement.className = 'crypto';
-                cryptoElement.innerHTML = `<strong>${crypto}:</strong> $${data.rate.toFixed(2)}`;
-                document.getElementById('crypto-data').appendChild(cryptoElement);
-            })
-            .catch(error => {
-                console.error("Could not retrieve or display data for ", crypto, error);
-            });
-        });
-		 fetch('https://api.alternative.me/fng/?limit=1')
-        .then(response => response.json())
-        .then(data => {
-            const indexData = data.data[0];
-            const indexValue = parseInt(indexData.value, 10);
-            const progressBarWidth = document.querySelector('.progress-container').offsetWidth;
-            const indicator = document.getElementById('indicator');
-            const bubble = document.getElementById('bubble');
+        // CoinAPI Key
+        const api_key = 76ac23a4-5a3e-42ac-839d-12792f2023e7'; // Replace with your actual CoinAPI key
+        // CoinAPI and Crypto Tracker JavaScript
+        // Your existing JavaScript for fetching and displaying crypto data
+        // Note: You need to include your CoinAPI key in the headers for fetch()
 
-            // Calculate the left position as a percentage of the progress bar width
-            const indicatorPositionPercentage = indexValue / 100;
-            const indicatorPosition = progressBarWidth * indicatorPositionPercentage;
-            
-            // Update the indicator line position
-            indicator.style.left = `${indicatorPositionPercentage * 100}%`;
-
-            // Center the bubble over the indicator line
-            bubble.style.left = `calc(${indicatorPositionPercentage * 100}% - ${bubble.offsetWidth / 2}px)`;
-            bubble.style.transform = 'translateY(-50%)'; // Vertically center
-            bubble.textContent = indexValue; // Display the index value inside the bubble
-        })
-        .catch(error => {
-            console.error('Error fetching data:', error);
-        });
+        // Fear and Greed Index JavaScript
+        // Your existing JavaScript for fetching and displaying Fear and Greed Index data
+        // Note: Ensure this part is correctly fetching and displaying data
     </script>
 </body>
 </html>
