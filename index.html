@@ -83,9 +83,7 @@
     // Example Crypto Investments fetching and displaying logic
     const cryptoDataElement = document.getElementById('cryptoData');
     const cryptocurrencies = ['BTC', 'ETH', 'DOT']; // Example cryptocurrencies
-    const apiKey = 76ac23a4-5a3e-42ac-839d-12792f2023e7
-
-; // Replace with your actual CoinAPI key
+    const apiKey = '76ac23a4-5a3e-42ac-839d-12792f2023e7'; // Replace with your actual CoinAPI key
 
     cryptocurrencies.forEach(crypto => {
         fetch(`https://rest.coinapi.io/v1/exchangerate/${crypto}/USD`, {
