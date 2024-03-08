@@ -42,12 +42,12 @@
         .progress-bar {
             height: 100%;
             background: linear-gradient(to right, #a00, #ffcc00, #00a000);
-            width: 0%; /* Initialize width to 0% */
+            width: 0%;
             position: absolute;
             top: 0;
             left: 0;
             border-radius: 20px;
-            transition: width 0.5s ease-in-out; /* Smooth transition for width change */
+            transition: width 0.5s ease-in-out;
         }
         .marker, .marker-label, .neutral-label {
             position: absolute;
@@ -61,13 +61,13 @@
         }
         .marker-label {
             color: #fff;
-            top: -25px; /* Adjust position above the progress bar */
+            top: -25px;
             transform: translateX(-50%);
             font-size: 14px;
         }
         .neutral-label {
             color: #fff;
-            top: 60px; /* Position below the progress bar */
+            top: 60px;
             left: 50%;
             transform: translateX(-50%);
             font-size: 12px;
@@ -96,18 +96,42 @@
             border: 2px solid #333;
             transform: translate(-50%, -50%);
         }
-        .crypto-data div {
-            margin: 10px 0;
+        .crypto-data {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .crypto-entry {
+            display: flex;
+            align-items: center;
             padding: 10px;
-            border-radius: 5px;
-            background-color: #666;
+            margin-top: 10px;
+            background: #666;
             color: #fff;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Adding some depth */
-            transition: background-color 0.3s; /* Smooth background-color transition */
+            border-radius: 4px;
+            width: 100%;
         }
-        .crypto-data div:hover {
-            background-color: #777; /* Slight color change on hover for interactive feel */
+        .crypto-logo {
+            width: 25px;
+            height: 25px;
+            margin-right: 10px;
         }
+        .crypto-ticker {
+            flex: 1;
+        }
+        .crypto-price, .crypto-change {
+            margin-left: 10px;
+            padding: 3px 7px;
+            border-radius: 5px;
+            background: #777;
+        }
+        .crypto-change.positive {
+            color: #0f0;
+        }
+        .crypto-change.negative {
+            color: #f00;
+        }
+        /* Add more styles if necessary */
     </style>
 </head>
 <body>
@@ -130,62 +154,61 @@
 
     <div class="crypto-container">
         <div class="crypto-title">Crypto Investments</div>
-        <div class="crypto-data" id="cryptoData"></div>
+        <div class="crypto-data" id="cryptoData">Loading...</div>
     </div>
 
     <script>
-    // Fear and Greed Index fetching and displaying logic
-    fetch('https://api.alternative.me/fng/?limit=1')
-        .then(response => response.json())
-        .then(data => {
-            const indexData = data.data[0];
-            const indexValue = parseInt(indexData.value, 10);
-            const progressBar = document.querySelector('.progress-bar');
-            const indicator = document.getElementById('indicator');
-            const bubble = document.getElementById('bubble');
+        // Fear and Greed Index fetching and displaying logic
+        fetch('https://api.alternative.me/fng/?limit=1')
+            .then(response => response.json())
+            .then(data => {
+                const indexData = data.data[0];
+                const indexValue = parseInt(indexData.value, 10);
+                const progressBar = document.querySelector('.progress-bar');
+                const indicator = document.getElementById('indicator');
+                const bubble = document.getElementById('bubble');
 
-            // Set the width of the progress bar and position the indicator and bubble
-            progressBar.style.width = `${indexValue}%`;
-            indicator.style.left = `${indexValue}%`;
-            bubble.style.left = `${indexValue}%`;
-            bubble.textContent = indexValue; // Display the index value inside the bubble
-        })
-        .catch(error => {
-            console.error('Error fetching Fear and Greed data:', error);
-            document.querySelector('.progress-container').textContent = 'Error fetching index data.';
-        });
+                progressBar.style.width = `${indexValue}%`;
+                indicator.style.left = `${indexValue}%`;
+                bubble.style.left = `${indexValue}%`;
+                bubble.textContent = indexValue;
+            })
+            .catch(error => {
+                console.error('Error fetching Fear and Greed data:', error);
+                document.querySelector('.progress-container').textContent = 'Error fetching index data.';
+            });
 
-    // Crypto Investments fetching and displaying logic
-    const cryptoDataElement = document.getElementById('cryptoData');
-    const cryptocurrencies = ['BTC', 'ETH', 'DOT']; // Add any other cryptocurrencies you're tracking
-    const apiKey = '76ac23a4-5a3e-42ac-839d-12792f2023e7'; // Replace with your actual CoinAPI key
+        // Crypto Investments fetching and displaying logic
+        const cryptoDataElement = document.getElementById('cryptoData');
+        const ids = [
+            'ethereum', 'cardano', 'the-graph', 'chainlink', 'synthetix-network-token', 
+            'fetch-ai', 'cosmos', 'shiba-inu', 'numeraire', 'bitcoin', 
+            'polkadot', 'injective-protocol', 'ocean-protocol', 'algorand', 
+            'optimism', 'curve-dao-token', 'matic-network'
+        ];
 
-    // Clear any previous content
-    cryptoDataElement.innerHTML = '';
-
-    cryptocurrencies.forEach(crypto => {
-        fetch(`https://rest.coinapi.io/v1/exchangerate/${crypto}/USD`, {
-            headers: { 'X-CoinAPI-Key': apiKey }
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`An error occurred: ${response.statusText}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            const rate = data.rate.toFixed(2);
-            const div = document.createElement('div');
-            div.textContent = `${crypto}: $${rate}`;
-            cryptoDataElement.appendChild(div);
-        })
-        .catch(error => {
-            console.error(`Error fetching data for ${crypto}:`, error);
-            const errorMessage = document.createElement('div');
-            errorMessage.textContent = `Error fetching data for ${crypto}.`;
-            cryptoDataElement.appendChild(errorMessage);
-        });
-    });
+        fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${ids.join(',')}&order=market_cap_desc&sparkline=false&price_change_percentage=24h`)
+            .then(response => response.json())
+            .then(data => {
+                cryptoDataElement.innerHTML = ''; // Clear initial content
+                data.forEach(coin => {
+                    const div = document.createElement('div');
+                    div.className = 'crypto-entry';
+                    div.innerHTML = `
+                        <img src="${coin.image}" alt="${coin.name}" class="crypto-logo">
+                        <span class="crypto-ticker">${coin.symbol.toUpperCase()}</span>
+                        <span class="crypto-price">$${coin.current_price.toLocaleString()}</span>
+                        <span class="crypto-change ${coin.price_change_percentage_24h > 0 ? 'positive' : 'negative'}">
+                            ${coin.price_change_percentage_24h.toFixed(2)}%
+                        </span>
+                    `;
+                    cryptoDataElement.appendChild(div);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching cryptocurrency data:', error);
+                cryptoDataElement.textContent = 'Failed to load cryptocurrency data.';
+            });
     </script>
 </body>
 </html>
