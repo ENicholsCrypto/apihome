@@ -23,12 +23,13 @@
             margin: 0 auto; /* Centers the container */
             position: relative; /* For absolute positioning of children */
         }
-        .title {
+          .title {
             font-size: 24px;
-            position: relative; /* Changed from absolute to relative */
+            margin: 0 auto; /* Center the title */
+            position: absolute; /* Absolutely position the title */
             width: 100%;
-            text-align: center; /* Centers the title */
-            margin-top: 20px; /* Adds space above the title */
+            top: 20px; /* Adjust as needed for spacing above the progress bar */
+            left: 0; /* Align left edge with container */
             z-index: 2;
         }
         }
@@ -38,7 +39,7 @@
             position: relative;
             height: 50px;
             box-sizing: border-box;
-            margin-top: 60px; /* Give some space for title */
+            margin-top: 70px; /* Give some space for title */
         }
         .progress-bar {
             height: 100%;
