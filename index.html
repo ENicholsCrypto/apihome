@@ -9,36 +9,47 @@
             font-family: Arial, sans-serif; 
             margin: 0;
             padding: 0;
-            background-color: transparent;
+            background-color: #f4f4f4;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            height: 100vh;
+            justify-content: flex-start;
+            min-height: 100vh;
         }
         .container, .crypto-container {
             text-align: center;
-            width: 100%;
+            width: calc(100% - 40px);
             max-width: 800px;
-            margin: 20px auto;
-            position: relative;
+            margin: 20px;
             padding: 20px;
             border-radius: 10px;
-            background-color: #555;
+            background-color: #333;
             color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         .title, .crypto-title {
             font-size: 24px;
-            margin: 20px 0;
+            margin-bottom: 20px;
         }
         .progress-bar, .crypto-data {
             margin-top: 20px;
         }
         .crypto-data div {
-            background: linear-gradient(to right, #a00, #ffcc00, #00a000);
             margin: 10px 0;
             padding: 10px;
             border-radius: 5px;
+            background-color: #444;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+        }
+        /* Additional styles for responsive design */
+        @media (max-width: 768px) {
+            .container, .crypto-container {
+                margin: 10px;
+                padding: 15px;
+            }
+            .title, .crypto-title {
+                font-size: 20px;
+            }
         }
     </style>
 </head>
@@ -46,15 +57,12 @@
     <div class="container">
         <div class="title">Fear and Greed Index</div>
         <div class="progress-container">
-            <div class="progress-bar"></div>
-            <div class="marker" style="left: 25%;"></div>
-            <div class="marker" style="left: 50%;"></div>
-            <div class="marker" style="left: 75%;"></div>
-            <div class="marker-label extreme-fear">Extreme Fear</div>
-            <div class="marker-label fear">Fear</div>
-            <div class="marker-label greed">Greed</div>
-            <div class="marker-label extreme-greed">Extreme Greed</div>
-            <div class="neutral-label">Neutral</div>
+            <div class="progress-bar" id="progressBar"></div>
+            <div class="marker-label extreme-fear" style="left: 25%;">Extreme Fear</div>
+            <div class="marker-label fear" style="left: 50%;">Fear</div>
+            <div class="marker-label greed" style="left: 75%;">Greed</div>
+            <div class="marker-label extreme-greed" style="right: 0;">Extreme Greed</div>
+            <div class="neutral-label" style="left: 50%;">Neutral</div>
             <div class="indicator" id="indicator"></div>
             <div class="bubble" id="bubble"></div>
         </div>
@@ -62,11 +70,10 @@
 
     <div class="crypto-container">
         <div class="crypto-title">Crypto Investments</div>
-        <div class="crypto-data" id="cryptoData">Loading...</div>
+        <div class="crypto-data" id="cryptoData"></div>
     </div>
 
     <script>
-    // Fear and Greed Index fetching and displaying logic
     fetch('https://api.alternative.me/fng/?limit=1')
         .then(response => response.json())
         .then(data => {
@@ -74,16 +81,19 @@
             const indexValue = parseInt(indexData.value, 10);
             const indicator = document.getElementById('indicator');
             const bubble = document.getElementById('bubble');
+            const progressBar = document.getElementById('progressBar');
 
-            indicator.style.width = indexValue + '%';
+            indicator.style.left = `${indexValue}%`;
+            progressBar.style.width = `${indexValue}%`;
             bubble.textContent = `${indexValue} (${indexData.value_classification})`;
         })
         .catch(error => console.error('Error fetching Fear and Greed data:', error));
 
-    // Example Crypto Investments fetching and displaying logic
     const cryptoDataElement = document.getElementById('cryptoData');
-    const cryptocurrencies = ['BTC', 'ETH', 'DOT']; // Example cryptocurrencies
-    const apiKey = '76ac23a4-5a3e-42ac-839d-12792f2023e7'; // Replace with your actual CoinAPI key
+    const cryptocurrencies = ['BTC', 'ETH', 'DOT'];
+    const apiKey = 'YOUR_COINAPI_KEY'; // Replace with your actual CoinAPI key
+
+    cryptoDataElement.textContent = ''; // Clear initial loading text
 
     cryptocurrencies.forEach(crypto => {
         fetch(`https://rest.coinapi.io/v1/exchangerate/${crypto}/USD`, {
@@ -98,9 +108,6 @@
         })
         .catch(error => console.error(`Error fetching data for ${crypto}:`, error));
     });
-
-    // Initial display cleanup
-    cryptoDataElement.textContent = '';
     </script>
 </body>
 </html>
