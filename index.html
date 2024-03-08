@@ -16,17 +16,21 @@
             align-items: center;
             height: 100vh;
         }
-        .container {
+         .container {
             text-align: center;
             width: 100%;
             max-width: 800px;
+            margin: 0 auto; /* Centers the container */
+            position: relative; /* For absolute positioning of children */
         }
         .title {
             font-size: 24px;
-            margin: 0;
-            position: absolute;
+            position: relative; /* Changed from absolute to relative */
             width: 100%;
-            top: 10px;
+            text-align: center; /* Centers the title */
+            margin-top: 20px; /* Adds space above the title */
+            z-index: 2;
+        }
         }
         .progress-container {
             background-color: #555;
